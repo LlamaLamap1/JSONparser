@@ -3,33 +3,26 @@ package bg.tu_varna.sit;
 import java.util.Scanner;
 
 public class CommandLineInterpreter {
-    private Command helpCommand;
+    private static CommandLineInterpreter instance=new CommandLineInterpreter();
+    private final CommandProcessor commandProcessor ;
 
-    public CommandLineInterpreter(Command helpCommand){
-        this.helpCommand=helpCommand;
+
+    private CommandLineInterpreter() {
+        this.commandProcessor = CommandProcessor.getInstance();
+        commandProcessor.registerCommand("help", new HelpCommand());
     }
-    String command;
-    public void processCommand(){
-        Scanner sc=new Scanner(System.in);
 
+    public static CommandLineInterpreter getInstance() {
+        return instance;
+    }
+
+    public void run() {
+        Scanner scanner = new Scanner(System.in);
+        String line;
         do {
-            System.out.print("Enter command:\n>");
-            command=sc.next();
-            switch(command){
-                case "help":
-                    helpCommand.execute();
-                    break;
-
-                case "exit":
-                    System.out.println("Exiting the program... ");
-                    break;
-
-                default:
-                    System.out.println("Unknown command ");
-                    break;
-            }
-
-
-        }while (!command.equals("exit"));
+            System.out.print("> ");
+            line = scanner.nextLine();
+            commandProcessor.executeCommand(line);
+        } while (!line.equals("exit"));
     }
 }
