@@ -1,4 +1,4 @@
-package bg.tu_varna.sit;
+package bg.tu_varna.sit.commands;
 
 import java.util.Scanner;
 
@@ -10,6 +10,8 @@ public class CommandLineInterpreter {
     private CommandLineInterpreter() {
         this.commandProcessor = CommandProcessor.getInstance();
         commandProcessor.registerCommand("help", new HelpCommand());
+        commandProcessor.registerCommand("exit", new ExitCommand());
+        commandProcessor.registerCommand("open", new OpenCommand());
     }
 
     public static CommandLineInterpreter getInstance() {

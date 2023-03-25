@@ -1,4 +1,4 @@
-package bg.tu_varna.sit;
+package bg.tu_varna.sit.commands;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class CommandProcessor {
     }
 
     public void executeCommand(String name) {
-        String[] line=name.split(" ");
+        String[] line=name.split(" ",2);
         Command command = commands.get(line[0]);
         if (command == null) {
             System.out.println("Unknown command");
