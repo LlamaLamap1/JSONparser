@@ -35,6 +35,4 @@ public class JSONtoCar extends JSONParser {
 
         return new Car(make, model, year, isElectric, features, dimensions, owner);
     }
-
-
 }
