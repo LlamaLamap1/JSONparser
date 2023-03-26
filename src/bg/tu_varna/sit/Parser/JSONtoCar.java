@@ -13,7 +13,7 @@ public class JSONtoCar extends JSONParser {
         Map<String, Object> json = parseObject(jsonString);
         Map<String, Object> carObject = (Map<String, Object>) json.get("car");
 
-        String make = (String) carObject.get("make");
+        String make = (String) carObject.get("brand");
         String model = (String) carObject.get("model");
         int year = ((Number) carObject.get("year")).intValue();
         boolean isElectric = (Boolean) carObject.get("isElectric");
