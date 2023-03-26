@@ -21,9 +21,6 @@ public class Car {
         this.owner = owner;
     }
 
-    public Car() {
-    }
-
     public String getBrand() {
         return brand;
     }
