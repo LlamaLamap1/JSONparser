@@ -11,7 +11,6 @@ public class Car {
     private Dimensions dimensions;
     private Object owner;
 
-    // constructor
     public Car(String make, String brand, int year, boolean isElectric, List<String> features, Dimensions dimensions, Object owner) {
         this.brand = make;
         this.model = brand;
@@ -22,7 +21,6 @@ public class Car {
         this.owner = owner;
     }
 
-    // getters and setters
     public String getMake() { return brand; }
     public void setMake(String make) { this.brand = make; }
     public String getModel() { return model; }
@@ -38,7 +36,6 @@ public class Car {
     public Object getOwner() { return owner; }
     public void setOwner(Object owner) { this.owner = owner; }
 
-    // toString() method
     @Override
     public String toString() {
         return "Car{" +
