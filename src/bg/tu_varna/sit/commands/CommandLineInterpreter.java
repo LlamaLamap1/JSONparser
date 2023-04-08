@@ -12,13 +12,16 @@ public class CommandLineInterpreter {
         commandProcessor.registerCommand("help", new HelpCommand());
         commandProcessor.registerCommand("exit", new ExitCommand());
         commandProcessor.registerCommand("open", new OpenCommand());
+        commandProcessor.registerCommand("close", new CloseCommand());
+        commandProcessor.registerCommand("print", new PrintCommand());
+        commandProcessor.registerCommand("validate", new ValidateCommand());
     }
 
     public static CommandLineInterpreter getInstance() {
         return instance;
     }
 
-    public void run() {
+    public void run(){
         Scanner scanner = new Scanner(System.in);
         String line;
         do {

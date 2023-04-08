@@ -9,6 +9,8 @@ public class HelpCommand implements Command{
         else{
             System.out.println("The following commands are supported: ");
             System.out.println("  open <file>   opens <file>");
+            System.out.println("  validate      checks if the content fallows JSON structure");
+            System.out.println("  print         displays the contents of the file");
             System.out.println("  help          prints this information ");
             System.out.println("  exit          exists the program ");
 

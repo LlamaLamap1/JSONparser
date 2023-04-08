@@ -7,54 +7,33 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class JSONParser  implements  JSONParserInterface{
-    public Map<String, Object> parseObject(String jsonString) throws JSONException {
+    public Map<String, Object> parseObject(String jsonString) {
         Map<String, Object> map = new LinkedHashMap<>();
         int i = 0;
         char[] chars = jsonString.toCharArray();
         int length = chars.length;
 
-        while (i < length && Character.isWhitespace(chars[i])) {
+        while (i < length && isWhitespace(chars[i])) {
             i++;
         }
-
-        if (i == length) {
-            throw new JSONException("Unexpected end of input");
-        }
-
-        if (chars[i] != '{') {
-            throw new JSONException("Expected '{' at start of input");
-        }
-
         i++;
 
         while (i < length && chars[i] != '}') {
-            while (i < length && Character.isWhitespace(chars[i])) {
+            while (i < length && isWhitespace(chars[i])) {
                 i++;
             }
 
             String key = parseString(chars, i);
             i += key.length()+2;
 
-            while (i < length && Character.isWhitespace(chars[i])) {
+            while (i < length && isWhitespace(chars[i])) {
                 i++;
-            }
-
-            if (i == length) {
-                throw new JSONException("Unexpected end of input");
-            }
-
-            if (chars[i] != ':') {
-                throw new JSONException("Expected ':' after key");
             }
 
             i++;
 
-            while (i < length && Character.isWhitespace(chars[i])) {
+            while (i < length && isWhitespace(chars[i])) {
                 i++;
-            }
-
-            if (i == length) {
-                throw new JSONException("Unexpected end of input");
             }
 
             Object value;
@@ -69,56 +48,37 @@ public abstract class JSONParser  implements  JSONParserInterface{
                 i += ((String) value).length()+2;
             } else if (Character.isDigit(chars[i]) || chars[i] == '-') {
                 value = parseNumber(chars, i);
-                i += String.valueOf(value).length();//ako e с toString ще създава винаги обекти
-            } else if (chars[i] == 't' || chars[i] == 'f' || chars[i] == 'n') {
-                value = parseBooleanOrNull(chars, i);
                 i += String.valueOf(value).length();
             } else {
-                throw new JSONException("Unexpected character at position " + i);
+                value = parseBooleanOrNull(chars, i);
+                i += String.valueOf(value).length();
             }
 
             map.put(key, value);
 
-            while (i < length && Character.isWhitespace(chars[i])) {
+            while (i < length && isWhitespace(chars[i])) {
                 i++;
-            }
-
-            if (i == length) {
-                throw new JSONException("Unexpected end of input");
             }
 
             if (chars[i] == ',') {
                 i++;
-                while (i < length && Character.isWhitespace(chars[i])) {
+                while (i < length && isWhitespace(chars[i])) {
                     i++;
                 }
-                if (i == length) {
-                    throw new JSONException("Unexpected end of input");
-                }
-            } else if (chars[i] != '}') {
-                throw new JSONException("Expected ',' or '}' after value");
             }
         }
 
         return map;
     }
 
-    private List<Object> parseArray(String jsonString) throws JSONException{
+    private List<Object> parseArray(String jsonString){
         List<Object> list = new ArrayList<>();
         int i = 0;
         char[] chars = jsonString.toCharArray();
         int length = chars.length;
 
-        while (i < length && Character.isWhitespace(chars[i])) {
+        while (i < length && isWhitespace(chars[i])) {
             i++;
-        }
-
-        if (i == length) {
-            throw new JSONException("Unexpected end of input");
-        }
-
-        if (chars[i] != '[') {
-            throw new JSONException("Expected '[' at start of input");
         }
 
         i++;
@@ -137,73 +97,49 @@ public abstract class JSONParser  implements  JSONParserInterface{
             } else if (Character.isDigit(chars[i]) || chars[i] == '-') {
                 element = parseNumber(chars, i);
                 i += String.valueOf(element).length();//ako e с toString ще създава винаги обекти
-            } else if (chars[i] == 't' || chars[i] == 'f' || chars[i] == 'n') {
+            } else {
                 element = parseBooleanOrNull(chars, i);
                 i += String.valueOf(element).length();
-            } else {
-                throw new JSONException("Unexpected character at position " + i);
             }
 
             list.add(element);
 
-            while (i < length && Character.isWhitespace(chars[i])) {
+            while (i < length && isWhitespace(chars[i])) {
                 i++;
-            }
-
-            if (i == length) {
-                throw new JSONException("Unexpected end of input");
             }
 
             if (chars[i] == ',') {
                 i++;
-                while (i < length && Character.isWhitespace(chars[i])) {
+                while (i < length && isWhitespace(chars[i])) {
                     i++;
                 }
-                if (i == length) {
-                    throw new JSONException("Unexpected end of input");
-                }
-            } else if (chars[i] != ']') {
-                throw new JSONException("Expected ',' or ']' after value");
             }
         }
 
         return list;
     }
-    private String parseString(char[] chars, int start) throws JSONException {
+    private String parseString(char[] chars, int start){
         StringBuilder sb = new StringBuilder();
         int i = start + 1;
-        char c;
 
-        while (i < chars.length && (c = chars[i++]) != '"') {
-            if (i == chars.length) {
-                throw new JSONException("Unexpected end of input after '\\'");
-            }
-
-            sb.append(c);
-        }
-
-        if (i == chars.length && chars[i - 1] != '"') {
-            throw new JSONException("Unexpected end of input");
+        while (i < chars.length &&  chars[i] != '"') {
+            sb.append(chars[i]);
+            i++;
         }
 
         return sb.toString();
     }
 
-    private Object parseNumber(char[] chars, int start) throws JSONException {
+    private Object parseNumber(char[] chars, int start){
         int i = start;
-        char c;
         boolean isDouble = false;
         Object result;
 
-        while (i < chars.length && ((c = chars[i]) == '-' || c == '.' || Character.isDigit(c))) {
-            if (c == '.') {
+        while (i < chars.length && (chars[i] == '-' || chars[i] == '.' || Character.isDigit(chars[i]))) {
+            if (chars[i] == '.') {
                 isDouble = true;
             }
             i++;
-        }
-
-        if ((isDouble && i - start == 1)) {
-            throw new JSONException("Invalid number at position " + start);
         }
         String strNumber=new String(chars, start, i - start);
         if (isDouble){
@@ -216,23 +152,17 @@ public abstract class JSONParser  implements  JSONParserInterface{
 
     }
 
-    private Object parseBooleanOrNull(char[] chars, int start) throws JSONException {
-        Boolean result;
+    private Object parseBooleanOrNull(char[] chars, int start){
         if (start + 4 <= chars.length && new String(chars, start, 4).equals("true")) {
-            result =Boolean.valueOf("true");
-            return result;
+            return true;
         }
         if (start + 5 <= chars.length && new String(chars, start, 5).equals("false")) {
-            result =Boolean.valueOf("false");
-            return result;
+            return false;
         }
-        if (start + 4 <= chars.length && new String(chars, start, 4).equals("null")) {
-            return "null";
-        }
-        throw new JSONException("Invalid boolean or null at position " + start);
+        return null;
     }
 
-    private int getEndOfObjectIndex(String jsonString) throws JSONException {
+    private int getEndOfObjectIndex(String jsonString){
         int i = 0;
         char[] chars = jsonString.toCharArray();
         int length = chars.length;
@@ -245,12 +175,9 @@ public abstract class JSONParser  implements  JSONParserInterface{
                 objectCount--;
             }
         }
-        if (objectCount != 0) {
-            throw new JSONException("Unexpected end of input");
-        }
         return i;
     }
-    private int getEndOfArrayIndex(String jsonString) throws JSONException {
+    private int getEndOfArrayIndex(String jsonString) {
         int i = 0;
         char[] chars = jsonString.toCharArray();
         int length = chars.length;
@@ -263,17 +190,10 @@ public abstract class JSONParser  implements  JSONParserInterface{
                 arrayCount--;
             }
         }
-        if (arrayCount != 0) {
-            throw new JSONException("Unexpected end of input");
-        }
         return i;
     }
 
     private boolean isWhitespace(char c) {
         return c == ' ' || c == '\t' || c == '\n' || c == '\r';
-    }
-
-    private boolean isStructuralChar(char c) {
-        return c == '{' || c == '}' || c == '[' || c == ']' || c == ':' || c == ',';
     }
 }

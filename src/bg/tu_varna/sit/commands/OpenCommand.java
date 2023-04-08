@@ -7,13 +7,21 @@ import bg.tu_varna.sit.jsonio.JSONHandler;
 import java.io.IOException;
 
 public class OpenCommand implements Command{
+    private static boolean isOpen=false;
     @Override
     public void execute(String[] args){
         try {
             if (args.length>1){
-                String path=args[1];
+                if (!isOpen){
+                    String path=args[1];
 
-                JSONHandler.handleJSON(path);
+
+                    JSONHandler.handleJSON(path);
+
+                    setIsOpen();
+                }
+                else
+                    System.out.println("File is already opened");
 
             }
             else
@@ -25,5 +33,12 @@ public class OpenCommand implements Command{
         catch (JSONException e){
             System.out.println(e);
         }
+    }
+
+    public static void setIsOpen() {
+        isOpen= !isOpen;
+    }
+    public static boolean isItOpen(){
+        return isOpen;
     }
 }

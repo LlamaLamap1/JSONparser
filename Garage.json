@@ -1,0 +1,31 @@
+{
+  "garage": {
+    "firstcar":{
+      "brand": "Toyota",
+      "model":"Camry",
+      "year": 2022,
+      "isElectric": false,
+      "features": ["power windows", "backup camera", "sunroof"],
+      "dimensions": {
+        "length": 192.1,
+        "width": 72.4,
+        "height": 56.9
+      },
+      "owner": null
+    },
+    "secondcar":{
+      "brand": "Toyota",
+      "model":"Camry",
+      "year": 2022,
+      "isElectric": false,
+      "features": ["power windows", "backup camera", "sunroof"],
+      "dimensions": {
+        "length": 192.1,
+        "width": 72.4,
+        "height": 56.9
+      },
+      "owner": null
+    }
+  }
+}
+
