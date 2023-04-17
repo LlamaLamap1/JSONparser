@@ -6,11 +6,11 @@ import bg.tu_varna.sit.jsonio.JSONHandler;
 
 public class CloseCommand implements Command {
     @Override
-    public void execute(String[] args) {
+    public void execute(String[] args) throws CommandException{
         if (args.length > 1) {
-            System.out.println("Unknown command");
+            throw new CommandException("Unknown command");
         } else if (!OpenCommand.isItOpen()) {
-            System.out.println("File is not opened");
+            throw new CommandException("A file has yet to be opened");
         } else {
             String fileName=JSONHandler.getDirectory();
             if (ValidateCommand.isItValid()){

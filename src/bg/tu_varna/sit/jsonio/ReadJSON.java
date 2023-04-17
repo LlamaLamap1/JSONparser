@@ -15,7 +15,6 @@ public class ReadJSON {
         }
 
         reader.close();
-        //System.out.println(stringBuilder.toString());
         return stringBuilder.toString();
     }
 }

@@ -16,6 +16,10 @@ public class Garage {
         carMap.put(key,value);
     }
 
+    public void setCar(String key,Car value){
+        carMap.replace(key,value);
+    }
+
     public void removeCar(String key,Car value){
         carMap.remove(key,value);
     }
@@ -29,6 +33,10 @@ public class Garage {
         instance=null;
     }
 
+    public void setCarMap(Map<String, Car> carMap) {
+        this.carMap = carMap;
+    }
+
     public Map<String, Car> getCarMap() {
         return carMap;
     }
@@ -37,20 +45,19 @@ public class Garage {
         return instance;
     }
 
+
     @Override
     public String toString() {
         int i=1;
-
         StringBuilder sb=new StringBuilder();
-        sb.append("garage{");
+        sb.append("Garage:");
         for (Map.Entry<String,Car> o: carMap.entrySet()) {
-            sb.append("\n\"").append(o.getKey()).append("\": {").append(o.getValue().toJSON()).append("\n}");
+            sb.append("\n").append(o.getKey()).append(": {").append(o.getValue()).append("\n}");
             if (i!= carMap.size()) {
-                sb.append(",");
+                sb.append("\n");
             }
             i++;
         }
-        sb.append("\n}");
         return sb.toString();
     }
 

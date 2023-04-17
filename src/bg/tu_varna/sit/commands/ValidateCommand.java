@@ -11,21 +11,21 @@ public class ValidateCommand implements Command {
     private static boolean isValid = false;
 
     @Override
-    public void execute(String[] args) {
+    public void execute(String[] args) throws CommandException {
         if (args.length > 1) {
-            System.out.println("Unknown command");
+            throw new CommandException("Unknown command");
         } else if (!OpenCommand.isItOpen()) {
-            System.out.println("File is not opened");
+            throw new CommandException("A file has yet to be opened");
         } else {
             try {
                 JSONValidator.initialize();
                 JSONValidator.validateObject(JSONHandler.getJsonString());
-                isValid=JSONValidator.isValidator();
+                isValid=JSONValidator.isValid();
                 if (isValid){
-                    JSONtoGarage jsoNtoCar=new JSONtoGarage();
-                    jsoNtoCar.parseJSON(JSONHandler.getJsonString());
+                    JSONtoGarage jsoNtoGarage=new JSONtoGarage();
+                    jsoNtoGarage.parseJSON(JSONHandler.getJsonString());
                 }
-            } catch (JSONException e) {
+            } catch (JSONException | IllegalArgumentException e) {
                 System.out.println(e);
             }
 

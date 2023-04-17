@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class JSONParser  implements  JSONParserInterface{
+public class JSONParser {
     public Map<String, Object> parseObject(String jsonString) {
         Map<String, Object> map = new LinkedHashMap<>();
         int i = 0;

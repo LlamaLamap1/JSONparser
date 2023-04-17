@@ -12,9 +12,10 @@ public class CommandLineInterpreter {
         commandProcessor.registerCommand("help", new HelpCommand());
         commandProcessor.registerCommand("exit", new ExitCommand());
         commandProcessor.registerCommand("open", new OpenCommand());
+        commandProcessor.registerCommand("validate", new ValidateCommand());
         commandProcessor.registerCommand("close", new CloseCommand());
         commandProcessor.registerCommand("print", new PrintCommand());
-        commandProcessor.registerCommand("validate", new ValidateCommand());
+        commandProcessor.registerCommand("search", new SearchCommand());
     }
 
     public static CommandLineInterpreter getInstance() {
@@ -22,12 +23,17 @@ public class CommandLineInterpreter {
     }
 
     public void run(){
-        Scanner scanner = new Scanner(System.in);
-        String line;
-        do {
-            System.out.print("> ");
-            line = scanner.nextLine();
-            commandProcessor.executeCommand(line);
-        } while (!line.equals("exit"));
+        try {
+            Scanner scanner = new Scanner(System.in);
+            String line;
+            do {
+                System.out.print("> ");
+                line = scanner.nextLine();
+                commandProcessor.executeCommand(line);
+            } while (!line.equals("exit"));
+        }
+        catch (CommandException ex){
+            System.out.println(ex);
+        }
     }
 }

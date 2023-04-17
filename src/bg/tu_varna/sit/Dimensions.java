@@ -18,6 +18,10 @@ public class Dimensions {
         this.height = height;
         order=new LinkedHashMap<>();
     }
+    public Dimensions(){
+        order=new LinkedHashMap<>();
+    }
+
     public void setOrder(Map<String, Object> order) {
         this.order = order;
     }
@@ -41,26 +45,47 @@ public class Dimensions {
 
     public void setLength(double length) {
         this.length = length;
-        order.replace("length",length);
+        if (order.containsKey("length"))
+            order.replace("length",length);
+        else
+            order.put("length",length);
     }
 
     public void setWidth(double width) {
         this.width = width;
-        order.replace("width",width);
+        if (order.containsKey("width"))
+            order.replace("width",width);
+        else
+            order.put("width",width);
     }
 
     public void setHeight(double height) {
         this.height = height;
-        order.replace("height",height);
+        if (order.containsKey("height"))
+            order.replace("height",height);
+        else
+            order.put("height",height);
     }
 
     @Override
     public String toString() {
         StringBuilder sb=new StringBuilder();
-        for (Map.Entry<String,Object> o: order.entrySet()) {
-            sb.append("\n\"").append(o.getKey()).append("\": ").append(o.getValue());
-        }
-        sb.append('\n');
+        sb.append("{Length: ");
+        if (length==0)
+            sb.append("Not specified ");
+        else
+            sb.append(length);
+        sb.append("\tWidth: ");
+        if (width==0)
+            sb.append("Not specified ");
+        else
+            sb.append(width);
+        sb.append("\tHeight: ");
+        if (height==0)
+            sb.append("Not specified ");
+        else
+            sb.append(height);
+        sb.append("}");
         return sb.toString();
     }
 

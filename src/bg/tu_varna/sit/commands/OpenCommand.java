@@ -6,10 +6,10 @@ import bg.tu_varna.sit.jsonio.JSONHandler;
 
 import java.io.IOException;
 
-public class OpenCommand implements Command{
+public class OpenCommand implements Command {
     private static boolean isOpen=false;
     @Override
-    public void execute(String[] args){
+    public void execute(String[] args) throws CommandException{
         try {
             if (args.length>1){
                 if (!isOpen){
@@ -21,11 +21,11 @@ public class OpenCommand implements Command{
                     setIsOpen();
                 }
                 else
-                    System.out.println("File is already opened");
+                    throw new CommandException("There is a file that is already opened");
 
             }
             else
-                System.out.println("This command needs file path as argument");
+                throw new CommandException("This command needs file path as argument");
         }
         catch (IOException e){
             System.out.println("Couldn't find the path to the file.");

@@ -19,13 +19,18 @@ public class CommandProcessor {
         commands.put(name, command);
     }
 
-    public void executeCommand(String name) {
-        String[] line=name.split(" ",2);
-        Command command = commands.get(line[0]);
-        if (command == null) {
-            System.out.println("Unknown command");
-        } else {
-            command.execute(line);
+    public void executeCommand(String name) throws CommandException {
+        try {
+            String[] line=name.split(" ",2);
+            Command command = commands.get(line[0]);
+            if (command == null) {
+                throw new CommandException("Unknown command");
+            } else {
+                command.execute(line);
+            }
+        }
+        catch (CommandException ex){
+            System.out.println(ex);
         }
     }
 }

@@ -1,25 +1,27 @@
 package bg.tu_varna.sit.Parser;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class JSONValidator {
-    private static boolean validator;
+    private static boolean valid;
     private static int level;
     private static boolean hadRootElement;
     private static int line;
-    private static Set<String> keys=new HashSet<>();
+    private static Map<Integer,Set<String>> keysAtLevel=new HashMap<>();
     private static boolean isKey;
     //инициализира началото за да не дефинирам на ново различните флагове и полета които ползвам
     public static void initialize(){
-        validator=true;
+        valid=true;
         level=0;
         hadRootElement=false;
         line=1;
-        keys.clear();
+        keysAtLevel.clear();
     }
-    public static boolean isValidator() {
-        return validator;
+    public static boolean isValid() {
+        return valid;
     }
 
     public static void validateObject(String jsonString) throws JSONException {
@@ -34,16 +36,16 @@ public class JSONValidator {
         }
 
         if (i == length) {
-            validator=false;
+            valid=false;
             throw new JSONException("Unexpected end of input at line: "+line);
         }
 
         if (chars[i] != '{') {
-            validator=false;
+            valid=false;
             throw new JSONException("Expected '{' at start of input at line: "+line);
         }
         else if (level==1 && hadRootElement){
-            validator=false;
+            valid=false;
             throw new JSONException("Multiple JSON root elements "+line);
         }
 
@@ -69,12 +71,12 @@ public class JSONValidator {
             }
 
             if (i == length) {
-                validator=false;
+                valid=false;
                 throw new JSONException("Unexpected end of input at line: "+line);
             }
 
             if (chars[i] != ':') {
-                validator=false;
+                valid=false;
                 throw new JSONException("Expected ':' after key at line: "+line);
             }
 
@@ -87,7 +89,7 @@ public class JSONValidator {
             }
 
             if (i == length) {
-                validator=false;
+                valid=false;
                 throw new JSONException("Unexpected end of input at line: "+line);
             }
 
@@ -109,7 +111,7 @@ public class JSONValidator {
                 i = validateBooleanOrNull(chars, i);
             }
             else {
-                validator=false;
+                valid=false;
                 throw new JSONException("Unexpected character at line "+line+" position " + i);
             }
 
@@ -120,7 +122,7 @@ public class JSONValidator {
             }
 
             if (i == length) {
-                validator=false;
+                valid=false;
                 throw new JSONException("Unexpected end of input at line: "+line);
             }
 
@@ -132,18 +134,19 @@ public class JSONValidator {
                     i++;
                 }
                 if (i == length) {
-                    validator=false;
+                    valid=false;
                     throw new JSONException("Unexpected end of input at line: "+line);
                 }
             } else if (chars[i] != '}') {
-                validator=false;
+                valid=false;
                 throw new JSONException("Expected ',' or '}' after value at line: "+line);
             }
         }
         if (chars[i]=='}'){
+            keysAtLevel.remove(level);
             level--;
             hadRootElement =true;
-            keys.clear();
+
             if (i<length && level==0) {
                 i++;
                 while (i < length && isWhitespace(chars[i])) {
@@ -152,10 +155,10 @@ public class JSONValidator {
                     i++;
                 }
                 if (i<length && chars[i] == '{') {
-                    validator = false;
+                    valid = false;
                     throw new JSONException("Multiple JSON root elements " + line);
                 } else if (i<length ){
-                    validator = false;
+                    valid = false;
                     throw new JSONException("Unexpected symbol " + chars[i] + " at line: " + line);
                 }
             }
@@ -176,12 +179,12 @@ public class JSONValidator {
         }
 
         if (i == length) {
-            validator=false;
+            valid=false;
             throw new JSONException("Unexpected end of input at line: "+line);
         }
 
         if (chars[i] != '[') {
-            validator=false;
+            valid=false;
             throw new JSONException("Expected '[' at start of input at line: "+line);
         }
 
@@ -206,7 +209,7 @@ public class JSONValidator {
                 i = validateBooleanOrNull(chars, i);
             }
             else {
-                validator=false;
+                valid=false;
                 throw new JSONException("Unexpected character at line "+line+" position " + i);
             }
 
@@ -217,7 +220,7 @@ public class JSONValidator {
             }
 
             if (i == length) {
-                validator=false;
+                valid=false;
                 throw new JSONException("Unexpected end of input at line: "+line);
             }
 
@@ -229,11 +232,11 @@ public class JSONValidator {
                     i++;
                 }
                 if (i == length) {
-                    validator=false;
+                    valid=false;
                     throw new JSONException("Unexpected end of input at line: "+line);
                 }
             } else if (chars[i] != ']') {
-                validator=false;
+                valid=false;
                 throw new JSONException("Expected ',' or ']' after value at line: "+line);
             }
         }
@@ -244,7 +247,7 @@ public class JSONValidator {
 
         while (i < chars.length && chars[i] != '"') {
             if (chars[i]=='\n'){
-                validator=false;
+                valid=false;
                 throw new JSONException("Unexpected new line at line: "+line);
             }
             sb.append(chars[i]);
@@ -254,20 +257,34 @@ public class JSONValidator {
 
 
         if (i == chars.length ) {
-            validator=false;
+            valid=false;
             throw new JSONException("Unexpected end of input at line: "+line);
         }
         if (chars[i] != '"'){
-            validator=false;
+            valid=false;
             throw new JSONException("Missing \" at: "+line);
         }
-        if (isKey){
-            if (keys.contains(sb.toString())){
-                validator=false;
+        if (isKey){//keys.contains(sb.toString())
+            if (keysAtLevel.size()!=0 && (keysAtLevel.containsKey(level) && keysAtLevel.get(level).contains(sb.toString()))){
+                valid=false;
                 throw new JSONException("Duplicated key value at line: "+line);
             }
             else
-                keys.add(sb.toString());
+            {
+                Set<String> temp;
+                if (keysAtLevel.containsKey(level) && !keysAtLevel.get(level).isEmpty()){
+                    temp=keysAtLevel.get(level);
+                    temp.add(sb.toString());
+                    keysAtLevel.replace(level,temp);
+                }
+
+                else {
+                    temp = new HashSet<>();
+                    temp.add(sb.toString());
+                    keysAtLevel.put(level,temp);
+                }
+            }
+
             isKey=false;
         }
 
@@ -283,7 +300,7 @@ public class JSONValidator {
         while (i < chars.length && ((c = chars[i]) == '-' || c == '.' || Character.isDigit(c))) {
             if (c=='.' && isDouble)
             {
-                validator=false;
+                valid=false;
                 throw new JSONException("Unexpected '.' at line: "+line);
             }
             if (c == '.') {
@@ -294,7 +311,7 @@ public class JSONValidator {
         }
 
         if ((isDouble && i - start == 1)) {
-            validator=false;
+            valid=false;
             throw new JSONException("Invalid number at line "+line+" position " + start);
         }
 
@@ -329,7 +346,7 @@ public class JSONValidator {
             }
         }
         if (objectCount != 0) {
-            validator=false;
+            valid=false;
             throw new JSONException("Unexpected end of input at line: "+line);
         }
         return i;
@@ -348,7 +365,7 @@ public class JSONValidator {
             }
         }
         if (arrayCount != 0) {
-            validator=false;
+            valid=false;
             throw new JSONException("Unexpected end of input at line: "+line);
         }
         return i;
