@@ -11,7 +11,7 @@ public class SearchCommand implements Command{
     private List<Object> result=new ArrayList<>();
     @Override
     public void execute(String[] args) throws CommandException {
-        if (args.length==1) {
+        if (args.length!=1) {
             throw new CommandException("Unknown command");
         } else if (!OpenCommand.isItOpen()) {
             throw new CommandException("A file has yet to be opened");
@@ -25,7 +25,10 @@ public class SearchCommand implements Command{
                 result.add(search.get(args[1]));
             else{
                 if (args[1].equals("garage"))
-                    result.add(Garage.getInstance().toJSON());
+                    if (search.isEmpty())
+                        throw new CommandException("No such keys");
+                    else
+                        result.add(Garage.getInstance().toJSON());
                 else{
                     Map<String,Object> order;
                     for (Car a: Garage.getInstance().getCarMap().values()) {

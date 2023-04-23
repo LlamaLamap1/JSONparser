@@ -11,7 +11,7 @@ public class OpenCommand implements Command {
     @Override
     public void execute(String[] args) throws CommandException{
         try {
-            if (args.length>1){
+            if (args.length!=1){
                 if (!isOpen){
                     String path=args[1];
 

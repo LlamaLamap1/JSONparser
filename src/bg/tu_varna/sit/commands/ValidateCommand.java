@@ -12,7 +12,7 @@ public class ValidateCommand implements Command {
 
     @Override
     public void execute(String[] args) throws CommandException {
-        if (args.length > 1) {
+        if (args.length != 1) {
             throw new CommandException("Unknown command");
         } else if (!OpenCommand.isItOpen()) {
             throw new CommandException("A file has yet to be opened");

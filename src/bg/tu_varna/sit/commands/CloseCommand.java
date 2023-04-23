@@ -17,6 +17,7 @@ public class CloseCommand implements Command {
                 Garage.removeGarage();
             }
             OpenCommand.setIsOpen();
+            ValidateCommand.setIsValid(false);
 
             System.out.println("Successfully closed "+fileName);
         }

@@ -49,6 +49,8 @@ public class Garage {
     @Override
     public String toString() {
         int i=1;
+        if  (carMap.isEmpty())
+            return "{}";
         StringBuilder sb=new StringBuilder();
         sb.append("Garage:");
         for (Map.Entry<String,Car> o: carMap.entrySet()) {
@@ -63,6 +65,8 @@ public class Garage {
 
     public String toJSON(){
         int i=1;
+        if  (carMap.isEmpty())
+            return "{}";
 
         StringBuilder sb=new StringBuilder();
         sb.append("garage{");

@@ -16,6 +16,7 @@ public class CommandLineInterpreter {
         commandProcessor.registerCommand("close", new CloseCommand());
         commandProcessor.registerCommand("print", new PrintCommand());
         commandProcessor.registerCommand("search", new SearchCommand());
+        commandProcessor.registerCommand("set", new SetCommand());
     }
 
     public static CommandLineInterpreter getInstance() {
