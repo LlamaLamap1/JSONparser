@@ -50,6 +50,7 @@ public class JSONtoCar extends JSONParser implements  JSONParserInterface{
         if (json.containsKey("dimensions")){
             jsoNtoDimensions.parseJSON((Map<String, Object>) json.get("dimensions"));
             dimensions=jsoNtoDimensions.toDimensions();
+            json.replace("dimensions",dimensions);
         }
         else
             dimensions=new Dimensions();
@@ -59,7 +60,7 @@ public class JSONtoCar extends JSONParser implements  JSONParserInterface{
 
 
         Object owner = json.get("owner");
-        Car car=new Car(brand, model, year, isElectric, features, dimensions, owner);;
+        Car car=new Car(brand, model, year, isElectric, features, dimensions, owner);
         car.setOrder(json);
         return car;
     }

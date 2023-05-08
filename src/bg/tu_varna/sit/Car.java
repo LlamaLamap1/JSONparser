@@ -25,10 +25,6 @@ public class Car {
         this.owner = owner;
         order=new LinkedHashMap<>();
     }
-/*
-    public void addToOrder(String key,Object value){
-        order.put(key,value);
-    }*/
 
     public void setOrder(Map<String, Object> order) {
         this.order = order;
@@ -55,7 +51,21 @@ public class Car {
     }
 
     public List<String> getFeatures() {
+
         return features;
+    }
+    public String featuresToJSON(){
+        StringBuilder sb=new StringBuilder();
+        int i=0;
+        sb.append("[");
+        for (String s: features) {
+            sb.append("\"").append(s).append("\"");
+            if (i!=features.size()-1)
+                sb.append(",");
+
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
     public Dimensions getDimensions() {
@@ -93,10 +103,10 @@ public class Car {
 
     public void setElectric(boolean electric) {
         isElectric = electric;
-        if (order.containsKey("electric"))
-            order.replace("electric",electric);
+        if (order.containsKey("isElectric"))
+            order.replace("isElectric",electric);
         else
-            order.put("electric",electric);
+            order.put("isElectric",electric);
     }
 
     public void setFeatures(List<String> features) {

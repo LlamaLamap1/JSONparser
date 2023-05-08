@@ -1,8 +1,6 @@
 package bg.tu_varna.sit;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Dimensions {
@@ -90,10 +88,15 @@ public class Dimensions {
     }
 
     public String toJSON(){
+        int i=1;
         StringBuilder sb=new StringBuilder();
         sb.append("{");
         for (Map.Entry<String,Object> o: order.entrySet()) {
             sb.append("\n\t\t\t\"").append(o.getKey()).append("\": ").append(o.getValue());
+            if (i!= order.size()) {
+                sb.append(",");
+            }
+            i++;
         }
         sb.append("\n\t\t}");
         return sb.toString();

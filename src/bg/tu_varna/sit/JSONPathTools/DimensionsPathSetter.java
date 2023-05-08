@@ -26,7 +26,7 @@ public class DimensionsPathSetter implements JSONPathSetter {
                 JSONValidator.validateObject(json);
                 Dimensions dimensions= car.getDimensions();
                 if (JSONValidator.isValid()) {
-                    Map<String,Object> order=car.getOrder();
+                    Map<String,Object> order=dimensions.getOrder();
                     if (order.containsKey(path[4])) {
                         switch (path[4]) {
                             case "length":

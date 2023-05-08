@@ -24,7 +24,7 @@ public class Garage {
         carMap.remove(key,value);
     }
 
-    private void clearGarage(){
+    public void clearGarage(){
         carMap.clear();
     }
 
@@ -69,7 +69,7 @@ public class Garage {
             return "{}";
 
         StringBuilder sb=new StringBuilder();
-        sb.append("garage{");
+        sb.append("{\n\"garage\":{");
         for (Map.Entry<String,Car> o: carMap.entrySet()) {
             sb.append("\n\t\"").append(o.getKey()).append("\": {").append(o.getValue().toJSON()).append("\n\t}");
             if (i!= carMap.size()) {
@@ -77,7 +77,7 @@ public class Garage {
             }
             i++;
         }
-        sb.append("\n}");
+        sb.append("\n\t}\n}");
         return sb.toString();
     }
 }

@@ -96,7 +96,7 @@ public class JSONParser {
                 i += ((String) element).length()+2;
             } else if (Character.isDigit(chars[i]) || chars[i] == '-') {
                 element = parseNumber(chars, i);
-                i += String.valueOf(element).length();//ako e с toString ще създава винаги обекти
+                i += String.valueOf(element).length();
             } else {
                 element = parseBooleanOrNull(chars, i);
                 i += String.valueOf(element).length();

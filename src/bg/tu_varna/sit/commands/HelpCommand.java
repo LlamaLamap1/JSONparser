@@ -13,6 +13,7 @@ public class HelpCommand implements Command{
             System.out.println("  print                     displays the contents of the file");
             System.out.println("  search <key>              searches and displays the values of every found <key>");
             System.out.println("  set <path> <string>       set the element at <path> with the contents of the JSON <string>");
+            System.out.println("  create <path> <string>    creates the element at <path> with the contents of the JSON <string>");
             System.out.println("  help                      prints this information ");
             System.out.println("  exit                      exists the program ");
 
