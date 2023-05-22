@@ -19,6 +19,8 @@ public class OpenCommand implements Command {
                     JSONHandler.handleJSON(path);
 
                     setIsOpen();
+                    String fileName=JSONHandler.getDirectory();
+                    System.out.println("Successfully opened "+ fileName);
                 }
                 else
                     throw new CommandException("There is a file that is already opened");
@@ -26,6 +28,7 @@ public class OpenCommand implements Command {
             }
             else
                 throw new CommandException("This command needs file path as argument");
+
         }
         catch (IOException e){
             System.out.println("Couldn't find the path to the file.");

@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class CommandLineInterpreter {
     private static CommandLineInterpreter instance=new CommandLineInterpreter();
-    private final CommandProcessor commandProcessor ;
+    private CommandProcessor commandProcessor ;
 
 
     private CommandLineInterpreter() {
@@ -18,6 +18,14 @@ public class CommandLineInterpreter {
         commandProcessor.registerCommand("search", new SearchCommand());
         commandProcessor.registerCommand("set", new SetCommand());
         commandProcessor.registerCommand("create", new CreateCommand());
+        commandProcessor.registerCommand("delete", new DeleteCommand());
+        commandProcessor.registerCommand("move", new MoveCommand());
+        commandProcessor.registerCommand("save", new SaveCommand());
+        commandProcessor.registerCommand("saveas", new SaveAsCommand());
+    }
+
+    public void addCommand(String name, Command command){
+        commandProcessor.registerCommand(name,command);
     }
 
     public static CommandLineInterpreter getInstance() {
